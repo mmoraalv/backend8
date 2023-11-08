@@ -13,6 +13,7 @@ import session from 'express-session'
 import MongoStore from 'connect-mongo'
 import mongoose from 'mongoose';
 import initializePassport from './config/passport.js'
+import generateMockProducts from './controllers/mocking.controller.js';
 
 const PORT = 8080;
 const app = express();
@@ -75,6 +76,7 @@ app.set('views', path.resolve(__dirname, './views'))
 app.use('/static', express.static(path.join(__dirname, '/public')));
 app.use('/static', routerHandlebars);
 app.use('/', router);
+app.get('/mockingproducts', generateMockProducts);
 
 //Cookies
 /*app.get('/setCookie', (req, res) => {

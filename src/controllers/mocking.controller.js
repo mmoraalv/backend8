@@ -1,5 +1,5 @@
 import faker from 'faker';
-import Product from '../models/products.models.js';
+//import Product from '../models/products.models.js';
 
 const generateMockProducts = async (req, res) => {
     try {
