@@ -6,14 +6,15 @@ const generateMockProducts = async (req, res) => {
         const products = [];
         for (let i = 0; i < 100; i++) {
             const productData = {
+                _id: faker.database.mongodbObjectId(),
                 title: faker.commerce.productName(),
                 description: faker.commerce.productDescription(),
                 price: parseFloat(faker.commerce.price()),
-                stock: faker.datatype.number({ min: 10, max: 100 }),
+                stock: faker.number.int({ min: 10, max: 100 }),
                 category: faker.commerce.department(),
                 status: true,
-                code: faker.random.alphaNumeric(10),
-                thumbnails: [faker.image.imageUrl()]
+                code: faker.string.alphanumeric(10),
+                thumbnails: [faker.image.url()]
             };
             
             products.push(productData);
