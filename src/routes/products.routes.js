@@ -10,7 +10,7 @@ const productRouter = Router()
 
 productRouter.get('/', getProducts)
 productRouter.get('/:id', getProduct)
-routerProd.post('/', (req, res, next) => {
+productRouter.post('/', (req, res, next) => {
     const { title, description, price, stock, code, category } = req.body;
     try {
         if (!title || !description || !price || !stock || !code || !category) {
