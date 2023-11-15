@@ -1,5 +1,9 @@
 import productModel from "../models/products.models.js";
 
+import CustomError from '../services/errors/customError.js';
+import EErrors from '../services/errors/enums.js';
+import { generateProductErrorInfo } from "../services/errors/info.js";
+
 export const getProducts = async (req, res) => {
     const { limit, page, filter, sort } = req.query
 
@@ -38,28 +42,27 @@ export const getProduct = async (req, res) => {
     }
 }
 
-export const postProduct = async (req, res) => {
-
-    const { title, description, code, price, stock, category } = req.body
-
+export const postProduct = async (req, res, next) => {
+    const { title, description, price, stock, code, category } = req.body;
     try {
-        const product = await productModel.create({ title, description, code, price, stock, category })
-
-        if (product) {
-            return res.status(201).send(product)
-        }
-
-        res.status(404).send({ error: "Producto no encontrado" })
-
-    } catch (error) {
-        if (error.code == 11000) {
-            return res.status(400).send({ error: `Llave duplicada` })
+        if (!title || !description || !price || !stock || !code || !category) {
+            const error = CustomError.createError({
+                name: "Product creation error",
+                cause: generateProductErrorInfo({ title, description, price, stock, code, category }),
+                message: "One or more properties were incomplete or not valid.",
+                code: EErrors.INVALID_PRODUCT_ERROR
+            });
+            next(error);
         } else {
-            return res.status(500).send({ error: `Error en consultar producto ${error}` })
+            const newProduct = new productModel({ title, description, price, stock, code, category });
+            const savedProduct = await newProduct.save();
+            res.status(201).send(savedProduct);
         }
-
+    } catch (error) {
+        next(error);
     }
 }
+
 
 export const putProduct = async (req, res) => {
     const { id } = req.params

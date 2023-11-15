@@ -76,7 +76,7 @@ app.set('views', path.resolve(__dirname, './views'))
 app.use('/static', express.static(path.join(__dirname, '/public')));
 app.use('/static', routerHandlebars);
 app.use('/', router);
-app.get('/mockingproducts', generateMockProducts);
+//app.get('/mockingproducts', generateMockProducts);
 
 //Cookies
 /*app.get('/setCookie', (req, res) => {
